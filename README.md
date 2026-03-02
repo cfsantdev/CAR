@@ -2,147 +2,262 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Imóveis e Pessoas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard CAR - Gestão Ambiental</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        .section { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
-        .full-width { grid-column: span 2; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
-        input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        .actions { display: flex; gap: 10px; margin-top: 20px; padding: 20px; background: #eee; border-radius: 8px; }
-        button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; }
-        .btn-save { background: #27ae60; color: white; }
-        .btn-import { background: #3498db; color: white; }
+        :root {
+            --primary: #2d6a4f;
+            --primary-light: #40916c;
+            --secondary: #1b4332;
+            --accent: #d8f3dc;
+            --bg: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 260px;
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content */
+        main {
+            margin-left: 260px;
+            flex: 1;
+            padding: 2rem 3rem;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        header h1 { font-size: 1.8rem; color: var(--secondary); }
+        header p { color: var(--text-muted); margin-top: 5px; }
+
+        /* Grid de Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-access {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn-access:hover {
+            background-color: var(--primary-light);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 99px;
+            background: #e2e8f0;
+            color: #475569;
+            width: fit-content;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            aside { display: none; }
+            main { margin-left: 0; padding: 1.5rem; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <form id="cadastroForm">
-        <h2>Dados Pessoais</h2>
-        <div class="section">
-            <div class="full-width"><label>Nome</label><input type="text" name="NOME" required></div>
-            <div><label>CPF</label><input type="text" name="CPF"></div>
-            <div><label>RG</label><input type="text" name="RG"></div>
-            <div><label>Nascimento</label><input type="date" name="NASCIMENTO"></div>
-            <div><label>Celular</label><input type="tel" name="CELULAR"></div>
-            <div class="full-width"><label>Mãe</label><input type="text" name="MAE"></div>
-            <div class="full-width"><label>Pai</label><input type="text" name="PAI"></div>
-            <div class="full-width"><label>E-mail</label><input type="email" name="EMAIL"></div>
-            <div><label>CEP</label><input type="text" name="CEP_PESSOA"></div>
-            <div><label>Rua</label><input type="text" name="RUA_PESSOA"></div>
-            <div><label>Número</label><input type="text" name="NUMERO_PESSOA"></div>
-            <div><label>Bairro</label><input type="text" name="BAIRRO_PESSOA"></div>
-            <div><label>Cidade</label><input type="text" name="CIDADE_PESSOA"></div>
-            <div><label>UF</label><input type="text" name="UF_PESSOA" maxlength="2"></div>
+    <aside>
+        <div class="logo">
+            <i data-lucide="leaf"></i>
+            <span>Portal CAR</span>
         </div>
+        <nav>
+            <a href="#" class="nav-link"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="#" class="nav-link"><i data-lucide="file-text"></i> Relatórios</a>
+            <a href="#" class="nav-link"><i data-lucide="settings"></i> Configurações</a>
+        </nav>
+    </aside>
 
-        <h2>Dados do Imóvel</h2>
-        <div class="section">
-            <div><label>Matrícula</label><input type="text" name="MATRICULA"></div>
-            <div><label>Coordenada Central</label><input type="text" name="COORDENADA_CENTRAL"></div>
-            <div class="full-width"><label>Nome do Imóvel</label><input type="text" name="NOME_IMOVEL"></div>
-            <div><label>CCIR</label><input type="text" name="CCIR"></div>
-            <div><label>Última Atualização</label><input type="date" name="DATA_ULTIMA_ATUALIZACAO"></div>
-            <div><label>Área</label><input type="text" name="AREA"></div>
-            <div><label>CEP</label><input type="text" name="CEP_IMOVEL"></div>
-            <div><label>Rua</label><input type="text" name="RUA_IMOVEL"></div>
-            <div><label>Número</label><input type="text" name="NUMERO_IMOVEL"></div>
-            <div><label>Bairro</label><input type="text" name="BAIRRO_IMOVEL"></div>
-            <div><label>Cidade</label><input type="text" name="CIDADE_IMOVEL"></div>
-            <div><label>UF</label><input type="text" name="UF_IMOVEL" maxlength="2"></div>
+    <main>
+        <header>
+            <h1 id="greeting">Bom dia, Gestor!</h1>
+            <p>Bem-vindo ao painel de controle do Cadastro Ambiental Rural.</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <div>
+                    <span class="status-badge">Externo</span>
+                    <div class="icon-box"><i data-lucide="globe"></i></div>
+                    <h3>Módulo Público SIMLAM</h3>
+                    <p>Acesse consultas públicas, legislações e informações gerais do IDAF/ES.</p>
+                </div>
+                <a href="http://simlam.idaf.es.gov.br/portal/" target="_blank" class="btn-access">
+                    Acessar Portal <i data-lucide="external-link" size="16"></i>
+                </a>
+            </div>
+
+            <div class="card">
+                <div>
+                    <span class="status-badge">Restrito</span>
+                    <div class="icon-box" style="background: #cfe2ff; color: #084298;"><i data-lucide="lock"></i></div>
+                    <h3>Módulo Credenciado</h3>
+                    <p>Autenticação para profissionais credenciados e análise de processos internos.</p>
+                </div>
+                <a href="http://simlam.idaf.es.gov.br/Credenciado/Autenticacao/LogOn" target="_blank" class="btn-access" style="background: #084298;">
+                    Fazer Login <i data-lucide="log-in" size="16"></i>
+                </a>
+            </div>
+
+            <div class="card">
+                <div>
+                    <span class="status-badge">Acesso Rápido</span>
+                    <div class="icon-box" style="background: #fff3cd; color: #856404;"><i data-lucide="user-plus"></i></div>
+                    <h3>Novo Credenciado</h3>
+                    <p>Formulário para registro de novos profissionais no sistema SIMLAM.</p>
+                </div>
+                <a href="http://simlam.idaf.es.gov.br/publico/Credenciado/Criar" target="_blank" class="btn-access" style="background: #856404;">
+                    Cadastrar <i data-lucide="plus-circle" size="16"></i>
+                </a>
+            </div>
+
+            <div class="card">
+                <div>
+                    <span class="status-badge" style="background: #d1e7dd; color: #0f5132;">Ferramenta CAR</span>
+                    <div class="icon-box" style="background: #d1e7dd; color: #0f5132;"><i data-lucide="home"></i></div>
+                    <h3>Pessoa e Imóvel</h3>
+                    <p>Gerenciamento local de dados estruturados para importação/exportação JSON.</p>
+                </div>
+                <a href="https://cfsantdev.github.io/CAR/DOCUMENTOS/CADASTRO.html" target="_blank" class="btn-access" style="background: #0f5132;">
+                    Abrir Formulário <i data-lucide="arrow-right-circle" size="16"></i>
+                </a>
+            </div>
         </div>
+    </main>
 
-        <div class="actions">
-            <button type="button" class="btn-save" onclick="salvarArquivo()">Salvar JSON (Escolher Pasta)</button>
-            <button type="button" class="btn-import" onclick="document.getElementById('importFile').click()">Importar JSON</button>
-            <input type="file" id="importFile" style="display:none" accept=".json" onchange="importarDados(event)">
-        </div>
-    </form>
-</div>
+    <script>
+        // Inicializa os ícones do Lucide
+        lucide.createIcons();
 
-<script>
-    // Função para estruturar os dados conforme o JSON solicitado
-    function obterDadosDoForm() {
-        const f = new FormData(document.getElementById('cadastroForm'));
-        return {
-            DADOS_PESSOAIS: {
-                NOME: f.get('NOME'), CPF: f.get('CPF'), RG: f.get('RG'), NASCIMENTO: f.get('NASCIMENTO'),
-                MAE: f.get('MAE'), PAI: f.get('PAI'), CELULAR: f.get('CELULAR'), EMAIL: f.get('EMAIL'),
-                CEP: f.get('CEP_PESSOA'), RUA: f.get('RUA_PESSOA'), NUMERO: f.get('NUMERO_PESSOA'),
-                BAIRRO: f.get('BAIRRO_PESSOA'), CIDADE: f.get('CIDADE_PESSOA'), UF: f.get('UF_PESSOA')
-            },
-            DADOS_IMOVEL: {
-                MATRICULA: f.get('MATRICULA'), COORDENADA_CENTRAL: f.get('COORDENADA_CENTRAL'),
-                NOME: f.get('NOME_IMOVEL'), CCIR: f.get('CCIR'), DATA_ULTIMA_ATUALIZACAO: f.get('DATA_ULTIMA_ATUALIZACAO'),
-                AREA: f.get('AREA'), CEP: f.get('CEP_IMOVEL'), RUA: f.get('RUA_IMOVEL'), NUMERO: f.get('NUMERO_IMOVEL'),
-                BAIRRO: f.get('BAIRRO_IMOVEL'), CIDADE: f.get('CIDADE_IMOVEL'), UF: f.get('UF_IMOVEL')
-            }
-        };
-    }
-
-    // Função para salvar arquivo abrindo seletor de diretório/nome
-    async function salvarArquivo() {
-        const dados = obterDadosDoForm();
-        const jsonContent = JSON.stringify(dados, null, 2);
+        // Lógica de saudação dinâmica
+        const hour = new Date().getHours();
+        const greetingElement = document.getElementById('greeting');
         
-        try {
-            // Abre o seletor de arquivos do sistema
-            const handle = await window.showSaveFilePicker({
-                suggestedName: `cadastro_${dados.DADOS_PESSOAIS.NOME || 'novo'}.json`,
-                types: [{ description: 'Arquivo JSON', accept: {'application/json': ['.json']} }]
-            });
-            const writable = await handle.createWritable();
-            await writable.write(jsonContent);
-            await writable.close();
-            alert("Arquivo salvo com sucesso!");
-        } catch (err) {
-            console.error("O usuário cancelou ou o navegador não suporta a API.", err);
-            // Fallback para download simples se a API não estiver disponível
-            if(err.name !== 'AbortError') {
-                const blob = new Blob([jsonContent], {type: "application/json"});
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = "cadastro.json";
-                a.click();
-            }
-        }
-    }
+        if (hour >= 5 && hour < 12) greetingElement.innerText = "Bom dia, Gestor!";
+        else if (hour >= 12 && hour < 18) greetingElement.innerText = "Boa tarde, Gestor!";
+        else greetingElement.innerText = "Boa noite, Gestor!";
 
-    // Função para importar dados de um arquivo JSON
-    function importarDados(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const data = JSON.parse(e.target.result);
-            const form = document.getElementById('cadastroForm');
-
-            // Mapeamento Manual (para garantir que os campos batam com o JSON)
-            const dp = data.DADOS_PESSOAIS;
-            form.NOME.value = dp.NOME; form.CPF.value = dp.CPF; form.RG.value = dp.RG;
-            form.NASCIMENTO.value = dp.NASCIMENTO; form.MAE.value = dp.MAE; form.PAI.value = dp.PAI;
-            form.CELULAR.value = dp.CELULAR; form.EMAIL.value = dp.EMAIL; form.CEP_PESSOA.value = dp.CEP;
-            form.RUA_PESSOA.value = dp.RUA; form.NUMERO_PESSOA.value = dp.NUMERO;
-            form.BAIRRO_PESSOA.value = dp.BAIRRO; form.CIDADE_PESSOA.value = dp.CIDADE; form.UF_PESSOA.value = dp.UF;
-
-            const di = data.DADOS_IMOVEL;
-            form.MATRICULA.value = di.MATRICULA; form.COORDENADA_CENTRAL.value = di.COORDENADA_CENTRAL;
-            form.NOME_IMOVEL.value = di.NOME; form.CCIR.value = di.CCIR; 
-            form.DATA_ULTIMA_ATUALIZACAO.value = di.DATA_ULTIMA_ATUALIZACAO;
-            form.AREA.value = di.AREA; form.CEP_IMOVEL.value = di.CEP; form.RUA_IMOVEL.value = di.RUA;
-            form.NUMERO_IMOVEL.value = di.NUMERO; form.BAIRRO_IMOVEL.value = di.BAIRRO;
-            form.CIDADE_IMOVEL.value = di.CIDADE; form.UF_IMOVEL.value = di.UF;
-            
-            alert("Dados importados com sucesso!");
-        };
-        reader.readAsText(file);
-    }
-</script>
-
+        // Adiciona um efeito suave de entrada nos cards
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                card.style.transition = 'all 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    </script>
 </body>
 </html>
