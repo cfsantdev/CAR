@@ -147,29 +147,32 @@
 
     async function compartilharArquivo() {
         const dados = obterDadosDoForm();
-        const nomeArquivo = `CAR_${dados.DADOS_PESSOAIS.NOME.replace(/\s+/g, '_')}.json`;
-        const jsonContent = JSON.stringify(dados, null, 2);
-
-        // Cria um arquivo real na memória do navegador
-        const blob = new Blob([jsonContent], { type: 'application/json' });
+    
+        // 1. Prepara o conteúdo
+        const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+        const nomeArquivo = `CAR_${dados.DADOS_PESSOAIS.NOME.replace(/\s+/g, '_') || 'cadastro'}.json`;
         const arquivo = new File([blob], nomeArquivo, { type: 'application/json' });
 
-        // Verifica se o navegador suporta o compartilhamento de arquivos
-        if (navigator.canShare && navigator.canShare({ files: [arquivo] })) {
-            try {
-                await navigator.share({
-                    files: [arquivo],
-                    title: 'Cadastro Ambiental Rural - JSON',
-                    text: `Segue em anexo o arquivo JSON de: ${dados.DADOS_PESSOAIS.NOME}`
-                });
-            } catch (error) {
-                if (error.name !== 'AbortError') {
-                    console.error('Erro ao compartilhar:', error);
-                    alert('Erro ao tentar compartilhar o arquivo.');
-                }
+        // 2. Verifica suporte
+        if (!navigator.canShare || !navigator.canShare({ files: [arquivo] })) {
+            alert("Seu navegador não suporta o compartilhamento de arquivos.");
+            return;
+        }    
+
+        // 3. Executa o compartilhamento (DEVE ser a última coisa após o clique)
+        try {
+            await navigator.share({
+                files: [arquivo],
+                title: 'Cadastro CAR',
+                text: 'Segue anexo o arquivo JSON do cadastro.'
+            });
+        } catch (error) {
+            if (error.name === 'NotAllowedError') {
+                alert("O compartilhamento direto foi bloqueado. O arquivo será baixado para que você possa anexá-lo manualmente.");
+                salvarArquivo(); // Chama a função de salvar que já criamos
+            } else {
+                console.error('Erro detalhado:', error);
             }
-        } else {
-            alert('Seu navegador não suporta o envio direto de arquivos. Por favor, utilize a função "Salvar JSON" e anexe manualmente.');
         }
     }
 
