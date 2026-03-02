@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Dashboard CAR - Gestão Ambiental</title>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+      <script src="https://unpkg.com/lucide@latest"></script>
+   </head>
+   <body>
+      <aside>
+         <div class="logo">
+            <i data-lucide="leaf"></i>
+            <span>Portal CAR</span>
+         </div>
+         <nav>
+            <a href="#" class="nav-link"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="#" class="nav-link"><i data-lucide="file-text"></i> Relatórios</a>
+            <a href="#" class="nav-link"><i data-lucide="settings"></i> Configurações</a>
+         </nav>
+      </aside>
+      <main>
+         <div id="dashboard">
+            <header>
+               <h1 id="greeting">Bom dia, Gestor!</h1>
+               <p>Bem-vindo ao painel de controle do Cadastro Ambiental Rural.</p>
+            </header>
+            <div class="dashboard-grid">
+               <div class="card">
+                  <div>
+                     <span class="status-badge">Externo</span>
+                     <div class="icon-box"><i data-lucide="globe"></i></div>
+                     <h3>Módulo Público SIMLAM</h3>
+                     <p>Acesse consultas públicas, legislações e informações gerais do IDAF/ES.</p>
+                  </div>
+                  <a href="http://simlam.idaf.es.gov.br/portal/" target="_blank" class="btn-access">
+                  Acessar Portal <i data-lucide="external-link" size="16"></i>
+                  </a>
+               </div>
+               <div class="card">
+                  <div>
+                     <span class="status-badge">Restrito</span>
+                     <div class="icon-box" style="background: #cfe2ff; color: #084298;"><i data-lucide="lock"></i></div>
+                     <h3>Módulo Credenciado</h3>
+                     <p>Autenticação para profissionais credenciados e análise de processos internos.</p>
+                  </div>
+                  <a href="http://simlam.idaf.es.gov.br/Credenciado/Autenticacao/LogOn" target="_blank" class="btn-access" style="background: #084298;">
+                  Fazer Login <i data-lucide="log-in" size="16"></i>
+                  </a>
+               </div>
+               <div class="card">
+                  <div>
+                     <span class="status-badge">Acesso Rápido</span>
+                     <div class="icon-box" style="background: #fff3cd; color: #856404;"><i data-lucide="user-plus"></i></div>
+                     <h3>Novo Credenciado</h3>
+                     <p>Formulário para registro de novos profissionais no sistema SIMLAM.</p>
+                  </div>
+                  <a href="http://simlam.idaf.es.gov.br/publico/Credenciado/Criar" target="_blank" class="btn-access" style="background: #856404;">
+                  Cadastrar <i data-lucide="plus-circle" size="16"></i>
+                  </a>
+               </div>
+               <div class="card">
+                  <div>
+                     <span class="status-badge" style="background: #d1e7dd; color: #0f5132;">Ferramenta CAR</span>
+                     <div class="icon-box" style="background: #d1e7dd; color: #0f5132;"><i data-lucide="home"></i></div>
+                     <h3>Pessoa e Imóvel</h3>
+                     <p>Gerenciamento local de dados estruturados para importação/exportação JSON.</p>
+                  </div>
+                  <a href="https://cfsantdev.github.io/CAR/DOCUMENTOS/CADASTRO.html" target="_blank" class="btn-access" style="background: #0f5132;">
+                  Abrir Formulário <i data-lucide="arrow-right-circle" size="16"></i>
+                  </a>
+               </div>
+            </div>
+         </div>
+      </main>
+   </body>
+</html>
