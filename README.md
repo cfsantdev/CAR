@@ -172,103 +172,126 @@
             <span>Portal CAR</span>
         </div>
         <nav>
-            <a href="#" class="nav-link"><i data-lucide="layout-dashboard"></i> Dashboard</a>
-            <a href="#" class="nav-link"><i data-lucide="file-text"></i> Relatórios</a>
-            <a href="#" class="nav-link"><i data-lucide="settings"></i> Configurações</a>
+            <a href="#" class="nav-link active" data-page="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="#" class="nav-link" data-page="relatorios"><i data-lucide="file-text"></i> Relatórios</a>
+            <a href="#" class="nav-link" data-page="configuracoes"><i data-lucide="settings"></i> Configurações</a>
         </nav>
     </aside>
 
-    <main>
-        <header>
-            <h1 id="greeting">Bom dia, Gestor!</h1>
-            <p>Bem-vindo ao painel de controle do Cadastro Ambiental Rural.</p>
-        </header>
-
-        <div class="dashboard-grid">
-            <div class="card">
-                <div>
-                    <span class="status-badge">Externo</span>
-                    <div class="icon-box"><i data-lucide="globe"></i></div>
-                    <h3>Módulo Público SIMLAM</h3>
-                    <p>Acesse consultas públicas, legislações e informações gerais do IDAF/ES.</p>
-                </div>
-                <a href="http://simlam.idaf.es.gov.br/portal/" target="_blank" class="btn-access">
-                    Acessar Portal <i data-lucide="external-link" size="16"></i>
-                </a>
-            </div>
-
-            <div class="card">
-                <div>
-                    <span class="status-badge">Restrito</span>
-                    <div class="icon-box" style="background: #cfe2ff; color: #084298;"><i data-lucide="lock"></i></div>
-                    <h3>Módulo Credenciado</h3>
-                    <p>Autenticação para profissionais credenciados e análise de processos internos.</p>
-                </div>
-                <a href="http://simlam.idaf.es.gov.br/Credenciado/Autenticacao/LogOn" target="_blank" class="btn-access" style="background: #084298;">
-                    Fazer Login <i data-lucide="log-in" size="16"></i>
-                </a>
-            </div>
-
-            <div class="card">
-                <div>
-                    <span class="status-badge">Acesso Rápido</span>
-                    <div class="icon-box" style="background: #fff3cd; color: #856404;"><i data-lucide="user-plus"></i></div>
-                    <h3>Novo Credenciado</h3>
-                    <p>Formulário para registro de novos profissionais no sistema SIMLAM.</p>
-                </div>
-                <a href="http://simlam.idaf.es.gov.br/publico/Credenciado/Criar" target="_blank" class="btn-access" style="background: #856404;">
-                    Cadastrar <i data-lucide="plus-circle" size="16"></i>
-                </a>
-            </div>
-
-            <div class="card">
-                <div>
-                    <span class="status-badge" style="background: #d1e7dd; color: #0f5132;">Ferramenta CAR</span>
-                    <div class="icon-box" style="background: #d1e7dd; color: #0f5132;"><i data-lucide="home"></i></div>
-                    <h3>Pessoa e Imóvel</h3>
-                    <p>Gerenciamento local de dados estruturados para importação/exportação JSON.</p>
-                </div>
-                <a href="https://cfsantdev.github.io/CAR/DOCUMENTOS/CADASTRO.html" target="_blank" class="btn-access" style="background: #0f5132;">
-                    Abrir Formulário <i data-lucide="arrow-right-circle" size="16"></i>
-                </a>
-            </div>
-        </div>
+    <main id="app-container">
     </main>
 
     <script>
-        // Inicializa os ícones do Lucide
-        lucide.createIcons();
+        // 1. Definição dos Conteúdos (Templates)
+    const routes = {
+        dashboard: `
+            <div id="dashboard">
+            <header>
+                <h1 id="greeting">Bom dia, Gestor!</h1>
+                <p>Bem-vindo ao painel de controle do Cadastro Ambiental Rural.</p>
+            </header>
 
-        // Lógica de saudação dinâmica
-        const hour = new Date().getHours();
-        const greetingElement = document.getElementById('greeting');
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div>
+                        <span class="status-badge">Externo</span>
+                        <div class="icon-box"><i data-lucide="globe"></i></div>
+                        <h3>Módulo Público SIMLAM</h3>
+                        <p>Acesse consultas públicas, legislações e informações gerais do IDAF/ES.</p>
+                    </div>
+                    <a href="http://simlam.idaf.es.gov.br/portal/" target="_blank" class="btn-access">
+                        Acessar Portal <i data-lucide="external-link" size="16"></i>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <span class="status-badge">Restrito</span>
+                        <div class="icon-box" style="background: #cfe2ff; color: #084298;"><i data-lucide="lock"></i></div>
+                        <h3>Módulo Credenciado</h3>
+                        <p>Autenticação para profissionais credenciados e análise de processos internos.</p>
+                    </div>
+                    <a href="http://simlam.idaf.es.gov.br/Credenciado/Autenticacao/LogOn" target="_blank" class="btn-access" style="background: #084298;">
+                        Fazer Login <i data-lucide="log-in" size="16"></i>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <span class="status-badge">Acesso Rápido</span>
+                        <div class="icon-box" style="background: #fff3cd; color: #856404;"><i data-lucide="user-plus"></i></div>
+                        <h3>Novo Credenciado</h3>
+                        <p>Formulário para registro de novos profissionais no sistema SIMLAM.</p>
+                    </div>
+                    <a href="http://simlam.idaf.es.gov.br/publico/Credenciado/Criar" target="_blank" class="btn-access" style="background: #856404;">
+                        Cadastrar <i data-lucide="plus-circle" size="16"></i>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <span class="status-badge" style="background: #d1e7dd; color: #0f5132;">Ferramenta CAR</span>
+                        <div class="icon-box" style="background: #d1e7dd; color: #0f5132;"><i data-lucide="home"></i></div>
+                        <h3>Pessoa e Imóvel</h3>
+                        <p>Gerenciamento local de dados estruturados para importação/exportação JSON.</p>
+                    </div>
+                    <a href="https://cfsantdev.github.io/CAR/DOCUMENTOS/CADASTRO.html" target="_blank" class="btn-access" style="background: #0f5132;">
+                        Abrir Formulário <i data-lucide="arrow-right-circle" size="16"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        `,
+        relatorios: `
+            <header>
+                <h1>Relatórios</h1>
+                <p>Visualize as métricas e estatísticas dos cadastros realizados.</p>
+            </header>
+            <div class="card">
+                <p>Página de relatórios em construção.</p>
+            </div>
+        `,
+        configuracoes: `
+            <header>
+                <h1>Configurações</h1>
+                <p>Gerencie suas preferências e acessos do sistema.</p>
+            </header>
+            <div class="card">
+                <p>Aqui você pode configurar as preferências do painel.</p>
+            </div>
+        `
+    };
+
+    // 2. Função de Troca de Conteúdo
+    function loadPage(pageName) {
+        const container = document.getElementById('app-container');
+        container.innerHTML = routes[pageName] || routes['dashboard'];
         
-        if (hour >= 5 && hour < 12) greetingElement.innerText = "Bom dia, Gestor!";
-        else if (hour >= 12 && hour < 18) greetingElement.innerText = "Boa tarde, Gestor!";
-        else greetingElement.innerText = "Boa noite, Gestor!";
+        // Remove primeiro H1 (Conforme seu pedido anterior)
+        const primeiroH1 = container.querySelector("h1");
+        if (primeiroH1) primeiroH1.remove();
 
-        // Adiciona um efeito suave de entrada nos cards
-        document.querySelectorAll('.card').forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                card.style.transition = 'all 0.5s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, index * 100);
+        // Atualiza estilo do menu ativo
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+            if(link.getAttribute('data-page') === pageName) link.classList.add('active');
         });
 
-        // Remove a primeira TAG "h1" dentro da TAG "body"
-        document.addEventListener("DOMContentLoaded", function() {
-            // Seleciona o primeiro h1 dentro do body
-            const primeiroH1 = document.querySelector("body h1");
+        // Re-inicializa os ícones caso necessário
+        lucide.createIcons();
+    }
 
-            // Verifica se o elemento existe antes de tentar remover
-            if (primeiroH1) {
-              primeiroH1.remove();
-              console.log("O primeiro H1 foi removido com sucesso.");
-            }
+    // 3. Event Listeners
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = link.getAttribute('data-page');
+            loadPage(page);
         });
+    });
+
+    // Carrega a página inicial
+    loadPage('dashboard');
     </script>
 </body>
 </html>
