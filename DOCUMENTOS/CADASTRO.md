@@ -55,8 +55,11 @@
         </div>
 
         <div class="actions">
-            <button type="button" id="btnCompartilhar" onclick="compartilharArquivo()" style="background: #6c5ce7; color: white;">
-                <i data-lucide="share-2"></i> Compartilhar Arquivo (WhatsApp/Email)
+            <button type="button" onclick="enviarWhatsApp()" style="background: #25D366; color: white;">
+                <i data-lucide="message-circle"></i> WhatsApp
+            </button>
+            <button type="button" onclick="enviarEmail()" style="background: #ea4335; color: white;">
+                <i data-lucide="mail"></i> E-mail
             </button>
             <button type="button" class="btn-save" onclick="salvarArquivo()">Salvar JSON (Escolher Pasta)</button>
             <button type="button" class="btn-import" onclick="document.getElementById('importFile').click()">Importar JSON</button>
@@ -145,35 +148,26 @@
         reader.readAsText(file);
     }
 
-    async function compartilharArquivo() {
+    // Função auxiliar para formatar os dados em texto legível para mensagens
+    function formatarDadosParaTexto() {
         const dados = obterDadosDoForm();
+        const jsonContent = JSON.stringify(dados, null, 2);
+        return jsonContent;
+    }
+
+    function enviarWhatsApp() {
+        const texto = encodeURIComponent(formatarDadosParaTexto());
+        // Abre o WhatsApp com o texto pré-preenchido
+        window.open(`https://api.whatsapp.com/send?text=${texto}`, '_blank');
+    }
+
+    function enviarEmail() {
+        const dados = obterDadosDoForm();
+        const assunto = encodeURIComponent(`Cadastro CAR - ${dados.DADOS_PESSOAIS.NOME}`);
+        const corpo = encodeURIComponent(formatarDadosParaTexto());
     
-        // 1. Prepara o conteúdo
-        const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
-        const nomeArquivo = `CAR_${dados.DADOS_PESSOAIS.NOME.replace(/\s+/g, '_') || 'cadastro'}.json`;
-        const arquivo = new File([blob], nomeArquivo, { type: 'application/json' });
-
-        // 2. Verifica suporte
-        if (!navigator.canShare || !navigator.canShare({ files: [arquivo] })) {
-            alert("Seu navegador não suporta o compartilhamento de arquivos.");
-            return;
-        }    
-
-        // 3. Executa o compartilhamento (DEVE ser a última coisa após o clique)
-        try {
-            await navigator.share({
-                files: [arquivo],
-                title: 'Cadastro CAR',
-                text: 'Segue anexo o arquivo JSON do cadastro.'
-            });
-        } catch (error) {
-            if (error.name === 'NotAllowedError') {
-                alert("O compartilhamento direto foi bloqueado. O arquivo será baixado para que você possa anexá-lo manualmente.");
-                salvarArquivo(); // Chama a função de salvar que já criamos
-            } else {
-                console.error('Erro detalhado:', error);
-            }
-        }
+        // O protocolo mailto abre o cliente de e-mail padrão do usuário (Outlook, Gmail, etc)
+        window.location.href = `mailto:?subject=${assunto}&body=${corpo}`;
     }
 
     // Seleciona o primeiro h1 dentro do body
