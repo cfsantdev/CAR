@@ -55,6 +55,9 @@
         </div>
 
         <div class="actions">
+            <button type="button" id="btnCompartilhar" onclick="compartilharArquivo()" style="background: #6c5ce7; color: white;">
+                <i data-lucide="share-2"></i> Compartilhar Arquivo (WhatsApp/Email)
+            </button>
             <button type="button" class="btn-save" onclick="salvarArquivo()">Salvar JSON (Escolher Pasta)</button>
             <button type="button" class="btn-import" onclick="document.getElementById('importFile').click()">Importar JSON</button>
             <input type="file" id="importFile" style="display:none" accept=".json" onchange="importarDados(event)">
@@ -140,6 +143,34 @@
             alert("Dados importados com sucesso!");
         };
         reader.readAsText(file);
+    }
+
+    async function compartilharArquivo() {
+        const dados = obterDadosDoForm();
+        const nomeArquivo = `CAR_${dados.DADOS_PESSOAIS.NOME.replace(/\s+/g, '_')}.json`;
+        const jsonContent = JSON.stringify(dados, null, 2);
+
+        // Cria um arquivo real na memória do navegador
+        const blob = new Blob([jsonContent], { type: 'application/json' });
+        const arquivo = new File([blob], nomeArquivo, { type: 'application/json' });
+
+        // Verifica se o navegador suporta o compartilhamento de arquivos
+        if (navigator.canShare && navigator.canShare({ files: [arquivo] })) {
+            try {
+                await navigator.share({
+                    files: [arquivo],
+                    title: 'Cadastro Ambiental Rural - JSON',
+                    text: `Segue em anexo o arquivo JSON de: ${dados.DADOS_PESSOAIS.NOME}`
+                });
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    console.error('Erro ao compartilhar:', error);
+                    alert('Erro ao tentar compartilhar o arquivo.');
+                }
+            }
+        } else {
+            alert('Seu navegador não suporta o envio direto de arquivos. Por favor, utilize a função "Salvar JSON" e anexe manualmente.');
+        }
     }
 
     // Seleciona o primeiro h1 dentro do body
