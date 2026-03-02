@@ -276,14 +276,6 @@
             else greetingElement.innerText = "Boa noite, Gestor!";
         }
         
-        // Seleciona o primeiro h1 dentro do body
-        const primeiroH1 = document.querySelector("body h1");
-
-        // Verifica se o elemento existe antes de tentar remover
-        if (primeiroH1) {
-            primeiroH1.remove();
-        }
-
         // Atualiza estilo do menu ativo
         document.querySelectorAll('.nav-link').forEach(link => {
             link.classList.remove('active');
@@ -305,6 +297,14 @@
 
     // Carrega a página inicial
     loadPage('dashboard');
+
+    // Seleciona o primeiro h1 dentro do body
+    const primeiroH1 = document.querySelector("body h1");
+
+    // Verifica se o elemento existe antes de tentar remover
+    if (primeiroH1) {
+        primeiroH1.remove();
+    }
     </script>
 </body>
 </html>
