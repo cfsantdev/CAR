@@ -266,10 +266,23 @@
     function loadPage(pageName) {
         const container = document.getElementById('app-container');
         container.innerHTML = routes[pageName] || routes['dashboard'];
+        if(pageName === 'dashboard'){
+            // Lógica de saudação dinâmica
+            const hour = new Date().getHours();
+            const greetingElement = document.getElementById('greeting');
         
-        // Remove primeiro H1 (Conforme seu pedido anterior)
-        const primeiroH1 = container.querySelector("h1");
-        if (primeiroH1) primeiroH1.remove();
+            if (hour >= 5 && hour < 12) greetingElement.innerText = "Bom dia, Gestor!";
+            else if (hour >= 12 && hour < 18) greetingElement.innerText = "Boa tarde, Gestor!";
+            else greetingElement.innerText = "Boa noite, Gestor!";
+        }
+        
+        // Seleciona o primeiro h1 dentro do body
+        const primeiroH1 = document.querySelector("body h1");
+
+        // Verifica se o elemento existe antes de tentar remover
+        if (primeiroH1) {
+            primeiroH1.remove();
+        }
 
         // Atualiza estilo do menu ativo
         document.querySelectorAll('.nav-link').forEach(link => {
