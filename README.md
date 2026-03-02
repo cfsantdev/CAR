@@ -257,6 +257,18 @@
                 card.style.transform = 'translateY(0)';
             }, index * 100);
         });
+
+        // Remove a primeira TAG "h1" dentro da TAG "body"
+        document.addEventListener("DOMContentLoaded", function() {
+            // Seleciona o primeiro h1 dentro do body
+            const primeiroH1 = document.querySelector("body h1");
+
+            // Verifica se o elemento existe antes de tentar remover
+            if (primeiroH1) {
+              primeiroH1.remove();
+              console.log("O primeiro H1 foi removido com sucesso.");
+            }
+        });
     </script>
 </body>
 </html>
